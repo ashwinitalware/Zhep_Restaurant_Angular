@@ -1,0 +1,7 @@
+{
+  "name": "Zhep_Restaurant_Angular",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
