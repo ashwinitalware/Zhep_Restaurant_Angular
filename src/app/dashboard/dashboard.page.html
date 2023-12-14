@@ -1,0 +1,131 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
+    <ion-segment color="danger" class="pl-1 pr-1"  mode="ios" value="order" (ionChange)='segmentChanged($event)'>
+      <ion-segment-button (click)="book_order()" value="order">
+        <ion-label>New Order</ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="processing_order()" value="processing">
+        <ion-label>Ongoing </ion-label>
+      </ion-segment-button>
+      <ion-segment-button (click)="completed_order()" value="completed">
+        <ion-label>Complete </ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="switchTab === 'order'" class="p-1">
+    <div class="bdashboard bdashboard-gray-300 rounded-md border border-red-300 mb-2"  *ngFor="let order of allbooktables">
+      <ion-grid>
+        <ion-row class="border-b border-gray-400">
+          <ion-col size="12">
+            <div class="flex justify-between">
+              <div>
+                <p class="text-lg text-black">Ashwini Talware</p>
+                <p class="text-gray-400 text-sm">Mon, Sep 25, 2023 11:27 AM</p>
+              </div>
+              <div>
+                <p class="text-sm text-black">ID: #01</p>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="p-2">
+          <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
+    
+          <!-- Items Div -->
+          <div class="border-gray-300 border-dashed border-b">
+            <p class="text-black text-lg font-semibold mt-2">Chicken Biryani X 1</p>
+            <div class="flex justify-between">
+              <p>- Half</p>
+              <p>120 /-</p>
+            </div>
+          </div>
+    
+          <!-- Items Div -->
+          <div class="border-gray-300 border-dashed border-b mt-1">
+            <div class="flex justify-between">
+              <p class="text-black text-lg font-semibold mt-2">Mutton Biryani X 1</p>
+              <p>300 /-</p>
+            </div>
+          </div>
+    
+          <div class="flex justify-between">
+            <p class="text-gray-500 text-md mt-2"> TOTAL AMOUNT</p>
+            <p class="text-black font-semibold text-md mt-2"> 750.20</p>
+          </div>
+        </div>
+    
+        <ion-row>
+          <ion-col size="6">
+            <ion-button class="btn_class" color="success" expand="block">
+              Accept
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button class="btn_class" color="danger" expand="block" fill="outline">
+              Reject
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    
+  </div>
+
+  <div *ngIf="switchTab === 'processing'" class="p-1">
+    <div class="bdashboard bdashboard-gray-300 rounded-md border border-green-300">
+      <ion-grid>
+        <ion-row class="border-b border-gray-400">
+          <ion-col size="12">
+            <div class="flex justify-between">
+              <div>
+                <p class="text-lg text-black">Mayuri Patil</p>
+                <p class="text-gray-400 text-sm">Mon, Sep 25, 2023 11:27 AM</p>
+              </div>
+              <div>
+                <p class="text-sm text-black">ID: #05</p>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="p-2">
+          <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
+          <!-- Items Div -->
+          <div class="border-gray-300 border-dashed border-b">
+            <p class="text-black text-lg font-semibold mt-2">Chicken Biryani X 1</p>
+            <div class="flex justify-between">
+              <p>- Half</p>
+              <p>120 /-</p>
+            </div>
+          </div>
+          <!-- Items Div -->
+          <div class="border-gray-300 border-dashed border-b mt-1">
+            <div class="flex justify-between">
+              <p class="text-black text-lg font-semibold mt-2">Mutton Biryani X 1</p>
+              <p>300 /-</p>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <p class="text-gray-400 text-md mt-2"> TOTAL AMOUNT</p>
+            <p class="text-black font-semibold text-md mt-2"> 750.20</p>
+          </div>
+          <div class="border-b border-gray-300 border-dashed mt-3"></div>
+          <div class="flex justify-between p-2">
+            <p class="text-black font-bold text-lg mt-2"> Status</p>
+            <p class="text-green-500 font-semibold text-md mt-2"> Order is Cooking</p>
+          </div>
+        </div>
+      </ion-grid>
+    </div>
+  </div>
+
+  <div *ngIf="switchTab === 'completed'" class="p-1">
+
+  </div>
+ 
+ 
+  
+  </ion-content>
+  

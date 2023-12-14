@@ -1,0 +1,32 @@
+<ion-content [fullscreen]="true" class="bg-class">
+  <div style="margin-top: 20%;">
+    <form #form_login="ngForm" style="margin-top: -15%;">
+      <div class="p-4" >
+        <div align="center" class="flex justify-center logo mt-10">
+          <img width=120 height=120 src="assets/icon1.png" />
+        </div>
+        <div align="center" class="flex justify-center mt-3">
+          <p class="text-lg text-black">Enter your login details</p>
+        </div>
+        <ion-list class="p-2">
+
+          <ion-item class="border border-gray-300 rounded-full p-1" lines="none">
+            <ion-input  
+              type="email" name="email" value="email" ngModel  class="input" placeholder="Email"></ion-input>
+          </ion-item>
+
+          <ion-item class="border border-gray-300 rounded-full mt-2 p-1" lines="none">
+            <ion-input  type="text" name="password" value="password" ngModel  class="input" placeholder="Password"></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-row>
+          <ion-col size="12" (click)="login_submit(form_login)">
+            <ion-button class="btn_class" shape="round" color="danger" expand="block">Login</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+
+     
+    </form>
+  </div>
+</ion-content>
