@@ -82,7 +82,7 @@ export class AppComponent {
       //     await AppUpdate.openAppStore();
       //   };
 
-      //   const performImmediateUpdate = async () => {
+      //   const performImmediateUpdate = async () =>{
       //     const result = await AppUpdate.getAppUpdateInfo();
       //     if (
       //       result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE
@@ -94,7 +94,7 @@ export class AppComponent {
       //     }
       //   };
 
-      //   const startFlexibleUpdate = async () => {
+      //   const startFlexibleUpdate = async () =>{
       //     const result = await AppUpdate.getAppUpdateInfo();
       //     if (
       //       result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE
@@ -127,7 +127,7 @@ export class AppComponent {
   get_restro_info() {
     this.storage.get('restro').then((res1) => {
       this.user_id1 = parseInt(res1.email, 10);
-      alert(this.user_id1);
+      // alert(this.user_id1);
       this.url.presentLoading();
       this.url.dismiss();
       this.http

@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button class="text-white"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="text-white">Account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-content>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Orders</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Terms and Conditions</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Privacy policy</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Privacy policy</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Share App</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Reviews</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+  
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Change Password</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="alert-circle-outline"></ion-icon>
+        <ion-label>About Us</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2">
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>Contact Us</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item class="p-2" (click)="logout();">
+        <ion-icon slot="start" name="power-outline"></ion-icon>
+        <ion-label>Log Out</ion-label>
+        <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
+      </ion-item>
+    </div>
+  
+  </ion-content>
+</ion-content>
