@@ -74,42 +74,4 @@ export class LoginPage implements OnInit {
   }
   
 
-  login_submit1(f: NgForm) {
-    if (f.value.email && f.value.password) {
-      this.url.presentLoading();
-
-      const requestData = {
-        email: f.value.email,
-        password: f.value.password
-      };
-
-      this.http.post(`${this.url.serverUrl}restro_login`, requestData).subscribe(
-        (res: any) => {
-          if (res.status === false) {
-            this.url.presentToast('User not Registered');
-          } else {
-            this.session_data['email'] = res.data.id;
-            this.storage.set('restro', this.session_data);
-
-            this.storage.get('restro').then((res) => {
-              this.user_id1 = parseInt(res.email, 10) + 1;
-              console.log(this.user_id1);
-            });
-
-            this.url.presentToast('Login Successful');
-            this.router.navigate(['/dashboard']);
-          }
-
-          this.url.dismiss();
-        },
-        (err) => {
-          this.url.dismiss();
-          console.error('Login error:', err);
-          this.url.presentToast('Failed to login. Please try again.');
-        }
-      );
-    } else {
-      this.url.presentToast('Please enter both email and password.');
-    }
-  }
 }

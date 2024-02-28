@@ -14,120 +14,154 @@
   </ion-toolbar>
 </ion-header>
 
+
+
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div *ngIf="switchTab === 'order'" class="p-1">
-    <div class="bdashboard bdashboard-gray-300 rounded-md border border-red-300 mb-2" *ngFor="let order of allbooktables">
-      <ion-grid>
-        <ion-row class="border-b border-gray-400">
-          <ion-col size="12">
-            <div class="flex justify-between">
-              <div>
-                <p class="text-lg text-black">{{order.name}}</p>
-                <p class="text-gray-400 text-sm">{{order.order_date}}</p>
-              </div>
-              <div>
-                <p class="text-sm text-black">ID: {{order.order_id2}}</p>
-              </div>
-            </div>
-          </ion-col>
-        </ion-row>
-        <div class="p-2">
-          <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
-    
-          <!-- Items Div -->
-          <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
-            <div class="flex justify-between">
-              <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
-              <p>{{card.recipe_price}} /-</p>
-            </div>
-          </div>
-        
-          <div class="flex justify-between">
-            <p class="text-gray-500 text-md mt-2"> TOTAL AMOUNT</p>
-            <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
-          </div>
-        </div>
-    
-        <ion-row>
-          <ion-col size="6">
-            <ion-button (click)="accept_table(order['order_id2'])" class="btn_class" color="success" expand="block">
-              Accept
-            </ion-button>
-          </ion-col>
-          <ion-col size="6">
-            <ion-button (click)="cancel_table(order['order_id2'])" class="btn_class" color="dark" expand="block" fill="outline">
-              Reject
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-    
-  </div>
 
-  <div *ngIf="switchTab === 'processing'" class="p-1">
-    <div class="bdashboard bdashboard-gray-300 rounded-md border border-green-300" *ngFor="let order of allprocessing">
-      <ion-grid>
-        <ion-row class="border-b border-gray-400">
-          <ion-col size="12">
-            <div class="flex justify-between">
-              <div>
-                <p class="text-lg text-black">{{order.name}}</p>
-                <p class="text-gray-400 text-sm">{{order.order_date}}</p>
-              </div>
-              <div>
-                <p class="text-sm text-black">ID: {{order.order_id2}}</p>
-              </div>
-            </div>
-          </ion-col>
-        </ion-row>
-        <div class="p-2">
-          <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
-          <!-- Items Div -->
-          <div class="border-gray-300 border-dashed border-b"  *ngFor="let card of order.cards">
-            <div class="flex justify-between">
-              <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
-              <p>{{card.recipe_price}} /-</p>
-            </div>
-          </div>
-          <!-- Items Div -->
-      
-          <div class="flex justify-between">
-            <p class="text-gray-400 text-md mt-2"> TOTAL AMOUNT</p>
-            <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
-          </div>
-          <div class="border-b border-gray-300 border-dashed mt-3"></div>
-          <div class="flex justify-between p-2">
-            <p class="text-black font-bold text-lg mt-2"> Status</p>
-            <p class="text-green-500 font-semibold text-md mt-2"> {{order.status}}</p>
-          </div>
-        </div>
-      </ion-grid>
+
+  <!-- ===first div start== -->
+  <div class="mt-10" *ngIf="noOrdersFound">
+    <img src="assets/nodatafound.gif" alt="">
+    <div align="center" class="mt-5">
+      <p class="text-black font-bold text-lg mt-10">No Orders Found !</p>
+      <p class="text-gray-400 text-sm">here haven't placed any order
+        <!-- You haven't placed any order -->
+      </p>
     </div>
   </div>
+  <!-- ===first div End== -->
 
-  <div *ngIf="switchTab === 'completed'" class="p-1">
+  <!-- ===Second div start== -->
+  <div *ngIf="!noOrdersFound">
+    <div *ngIf="switchTab === 'order'" class="p-1">
+      <div class="bdashboard bdashboard-gray-300 rounded-md border border-gray-400 mb-2"
+        *ngFor="let order of allbooktables">
+        <ng-container *ngIf="order.status === 'In Progress'">
+          <ion-grid>
+            <ion-row class="border-b border-gray-400">
+              <ion-col size="12">
+                <div class="flex justify-between">
+                  <div>
+                    <p class="text-lg text-black">{{order.name}}</p>
+                    <p class="text-gray-400 text-sm">{{order.order_date}}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-black">ID: {{order.order_id2}}</p>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+            <div class="p-2">
+              <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
 
-  </div>
- 
- 
-  
-  </ion-content>
-  
-  <ion-footer>
-    <ion-toolbar>
-      <div class="flex justify-between p-2 pl-3 pr-3">
-          <div class="text-center text-gray-600 hover:text-red-600" routerLink="/dashboard">
-            <ion-icon name="fast-food"></ion-icon>
-            <ion-title class="text-sm">Orders</ion-title>
-          </div>
-  
-          <div class="text-center text-gray-600 hover:text-red-600"  routerLink="/profile">
-            <ion-icon name="person"></ion-icon>
-            <ion-title class="text-sm">Account</ion-title>
-          </div>
+              <!-- Items Div -->
+              <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+                <div class="flex justify-between">
+                  <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
+                  <p>{{card.recipe_price}} /-</p>
+                </div>
+              </div>
+
+              <div class="flex justify-between">
+                <p class="text-gray-500 text-md mt-2"> TOTAL AMOUNT</p>
+                <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
+              </div>
+            </div>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-button (click)="accept_table(order['order_id2'])" class="btn_class" color="success" expand="block">
+                  Accept
+                </ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-button (click)="cancel_table(order['order_id2'])" class="btn_class" color="dark" expand="block"
+                  fill="outline">
+                  Reject
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-container>
       </div>
-    </ion-toolbar>
-  
-  
-  </ion-footer>
+    </div>
+
+    <div *ngIf="switchTab === 'processing'" class="p-1">
+      <div class="bdashboard bdashboard-gray-300 rounded-md border border-green-300 mt-2"
+        *ngFor="let order of allprocessing">
+        <ion-grid>
+          <ion-row class="border-b border-gray-400">
+            <ion-col size="12">
+              <div class="flex justify-between">
+                <div>
+                  <p class="text-lg text-black">{{order.name}}</p>
+                  <p class="text-gray-400 text-sm">{{order.order_date}}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-black">ID: {{order.order_id2}}</p>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <div class="p-2">
+            <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
+            <!-- Items Div -->
+            <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+              <div class="flex justify-between">
+                <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
+                <p>{{card.recipe_price}} /-</p>
+              </div>
+            </div>
+            <!-- Items Div -->
+
+            <div class="flex justify-between">
+              <p class="text-gray-400 text-md mt-2"> TOTAL AMOUNT</p>
+              <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
+            </div>
+            <div class="border-b border-gray-300 border-dashed mt-3"></div>
+
+            <div [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md" (click)="show_map()">
+              <div class="flex justify-between p-3">
+                <p class="text-sm text-white flex items-center">{{ order.status }}</p>
+                <p class="border border-white rounded-full text-xs p-1 text-white">View Map</p>
+              </div>
+            </div>
+
+            <!-- <div class="flex justify-between p-2">
+              <p class="text-black font-bold text-lg mt-2"> Status</p>
+              <p class="text-green-500 font-semibold text-md mt-2"> {{order.status}}</p>
+            </div> -->
+
+            <!-- <div class="text-center font-bold text-red-600" (click)="show_map()">
+              <p>View Map</p>
+            </div> -->
+          </div>
+        </ion-grid>
+      </div>
+    </div>
+
+    <div *ngIf="switchTab === 'completed'" class="p-1">
+
+    </div>
+  </div>
+  <!-- ===Second div end== -->
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="flex justify-between p-2 pl-3 pr-3">
+      <div class="text-center text-gray-600 hover:text-red-600" routerLink="/dashboard">
+        <ion-icon name="fast-food"></ion-icon>
+        <ion-title class="text-sm">Orders</ion-title>
+      </div>
+
+      <div class="text-center text-gray-600 hover:text-red-600" routerLink="/profile">
+        <ion-icon name="person"></ion-icon>
+        <ion-title class="text-sm">Account</ion-title>
+      </div>
+    </div>
+  </ion-toolbar>
+
+
+</ion-footer>

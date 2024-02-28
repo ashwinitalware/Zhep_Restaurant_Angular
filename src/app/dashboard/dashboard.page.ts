@@ -11,6 +11,8 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
+  noOrdersFound: boolean = false;
+  isDataLoaded: boolean = false;
   switchTab = 'order';
   user_id1: any;
   allbooktables: any;
@@ -55,26 +57,38 @@ export class DashboardPage implements OnInit {
   ionViewWillEnter() {
     this.url.presentLoading();
     this.get_restro_order();
-    setInterval((): void => {
-      this.get_restro_order();
-    }, 60000);
+    // this.get_restro_order();
+    // setInterval((): void => {
+    //   this.get_restro_order();
+    // }, 60000);
     this.url.dismiss();
   }
+
 
   get_restro_order() {
     this.storage.get('restro').then((res1) => {
       this.user_id1 = parseInt(res1.email, 10);
-      this.http
-        .get(`${this.url.serverUrl}getRestroOrder?restro_id=${this.user_id1}`)
+      this.http.get(`${this.url.serverUrl}getRestroOrder?restro_id=${this.user_id1}`)
         .subscribe(
           (res: any) => {
             if (res.status) {
-              this.allbooktables = res.data;
-              this.session_data1 = this.allbooktables.order_id2;
-              if (this.allprocessing && this.allprocessing.length > 0) {
-                this.switchTab = 'processing';
+              // Filter orders based on status
+              this.allprocessing = res.data.filter((order: any) =>
+                order.status === 'Pending Delivery Boy' ||
+                order.status === 'Order Accepted' ||
+                order.status === 'Order Cooking' ||
+                order.status === 'Ready for Pickup' ||
+                order.status === 'Order is Pickup'
+              );
+  
+              this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
+  
+              // If the segment is not already set, determine the initial segment based on the presence of orders
+              if (!this.switchTab) {
+                this.switchTab = this.allprocessing.length > 0 ? 'processing' : 'order';
               }
             } else {
+              this.noOrdersFound = true;
               this.url.presentToast('You have no Order.');
             }
           },
@@ -84,30 +98,71 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  moveOrderToProcessing(order_id: any) {
-    const index = this.allbooktables.findIndex((order: any) => order.order_id2 === order_id);
-    if (index !== -1) {
-      const acceptedOrder = this.allbooktables.splice(index, 1)[0]; // Remove order from 'New Order'
-      this.allprocessing.push(acceptedOrder); // Add order to 'Processing'
-      this.switchTab = 'processing'; // Switch segment to 'Processing'
+  getBackgroundColor(status: string): string {
+    switch (status) {
+      case 'Pending Delivery Boy':
+        return '#ffc409'; // Yellow
+      case 'In Progress':
+        return 'orange';
+      case 'Order Accepted':
+      case 'Order Cooking':
+        return '#00771c'; // Green
+      case 'Order is Pickup':
+        return '#00771c'; // Adjust this to the desired color for "Order is Pickup"
+      default:
+        return '#ffc409'; // Default color
     }
   }
+  
+  // get_restro_order() {
+  //   this.storage.get('restro').then((res1) => {
+  //     this.user_id1 = parseInt(res1.email, 10);
+  //     this.http.get(`${this.url.serverUrl}getRestroOrder?restro_id=${this.user_id1}`)
+  //       .subscribe(
+  //         (res: any) => {
+  //           if (res.status) {
+  //             // Filter orders based on status
+  //             this.allprocessing = res.data.filter((order: any) =>
+  //               order.status === 'Pending Delivery Boy' ||
+  //               order.status === 'Order Accepted' ||
+  //               order.status === 'Order Cooking' ||
+  //               order.status === 'Ready for Pickup' ||
+  //               order.status === 'Order is Pickup'
+  //             );
+  
+  //             this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
+  
+  //             // If the segment is not already set, determine the initial segment based on the presence of orders
+  //             if (!this.switchTab) {
+  //               this.switchTab = this.allprocessing.length > 0 ? 'processing' : 'order';
+  //             }
+  //           } else {
+  //             this.url.presentToast('You have no Order.');
+  //           }
+  //         },
+  //         (err) => {
+  //         }
+  //       );
+  //   });
+  // }
+
+reloadData() {
+  this.isDataLoaded = false;
+  this.get_restro_order();
+}
 
   accept_table(order_id2: any) {
     this.storage.get('restro').then((res1) => {
       this.user_id1 = parseInt(res1.email, 10);
       this.table_accepted['order_id'] = order_id2;
       this.url.presentLoading();
-      this.http
-        .post(`${this.url.serverUrl}accept_order`, this.table_accepted)
+      this.http.post(`${this.url.serverUrl}accept_order`, this.table_accepted)
         .subscribe(
           (res: any) => {
             console.log(res);
-            {
-              this.url.presentToast('Your Order Table has been Accepted successfully!');
-              this.get_restro_order();
-            }
-            this.moveOrderToProcessing(order_id2);
+            this.url.presentToast('Your Order Table has been Accepted successfully!');
+            // this.get_restro_order();
+            this.get_restro_order();
             this.switchTab = 'processing'; // Set segment to 'processing' after moving order
             this.url.dismiss();
           },
@@ -117,6 +172,20 @@ export class DashboardPage implements OnInit {
         );
     });
   }
+  
+  moveOrderToProcessing(order_id: any) {
+    const index = this.allbooktables.findIndex((order: any) => order.order_id2 === order_id);
+    if (index !== -1) {
+      const acceptedOrder = this.allbooktables.splice(index, 1)[0]; // Remove order from 'New Order'
+      this.allprocessing.push(acceptedOrder); // Add order to 'Processing'
+      this.switchTab = 'processing'; // Switch segment to 'Processing'
+    }
+  }
+  
+  show_map() {
+    this.router.navigate([`show-map`]);
+  }
+
 
   cancel_table(order_id2: any) {
     this.storage.get('restro').then((res1) => {

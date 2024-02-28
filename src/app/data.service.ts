@@ -7,9 +7,16 @@ import { Storage } from '@ionic/storage-angular';
 })
 export class DataService {
 
+  user_map_address: any = 'Choose your location';
+  user_map_lat: any;
+  user_map_lan: any;
+  loginData: any;
+
   isLoading: any;
   serverUrl = 'https://zhepfood.com/public/api/';
   imageUrl = 'https://zhepfood.com/public/banner/';
+  lat: any;
+  long: any;
 
   constructor(
     private storage: Storage,

@@ -32,5 +32,4 @@ export class ProfilePage implements OnInit {
     this.url.presentToast('Logout Successfully.');
   }
 
-
 }
