@@ -18,8 +18,6 @@ export class AppComponent {
   dataService: any;
   Restro_Name: any;
 
-
-
   constructor(
     public url: DataService,
     private http: HttpClient,
@@ -147,4 +145,6 @@ export class AppComponent {
         );
     });
   }
+
+
 }

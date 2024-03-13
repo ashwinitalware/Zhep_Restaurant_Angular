@@ -56,16 +56,21 @@
               <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
 
               <!-- Items Div -->
-              <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+             <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+              <div>
                 <div class="flex justify-between">
-                  <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
-                  <p>{{card.recipe_price}} /-</p>
+                  <p class="text-black text-lg font-semibold mt-2">{{card.index}} {{card.recipe_name}} - Qty :
+                    {{card.quantity}}</p>
+                  <p>₹ {{card.recipe_price}} /-</p>
                 </div>
+                <p class="text-gray-500 text-md">Varient : {{card.varient}}
+                </p>
               </div>
+             </div>
 
               <div class="flex justify-between">
                 <p class="text-gray-500 text-md mt-2"> TOTAL AMOUNT</p>
-                <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
+                <p class="text-black font-semibold text-md mt-2">₹ {{order.grand_total}}</p>
               </div>
             </div>
 
@@ -87,8 +92,8 @@
       </div>
     </div>
 
-    <div *ngIf="switchTab === 'processing'" class="p-1">
-      <div class="bdashboard bdashboard-gray-300 rounded-md border border-green-300 mt-2"
+    <div *ngIf="switchTab === 'processing'">
+      <div class="bdashboard bdashboard-gray-300 rounded-md border border-gray-300 mt-2"
         *ngFor="let order of allprocessing">
         <ion-grid>
           <ion-row class="border-b border-gray-400">
@@ -107,24 +112,29 @@
           <div class="p-2">
             <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
             <!-- Items Div -->
-            <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+           <div  class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
+            <div >
               <div class="flex justify-between">
-                <p class="text-black text-lg font-semibold mt-2">{{card.recipe_name}} - Qty : {{card.quantity}}</p>
-                <p>{{card.recipe_price}} /-</p>
+                <p class="text-black text-lg font-semibold mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
+                  {{card.quantity}}</p>
+                <p>₹ {{card.recipe_price}} /-</p>
               </div>
             </div>
+            <p class="text-gray-500 text-md">Varient : {{card.varient}}
+            </p>
+            </div>
             <!-- Items Div -->
-
+           
             <div class="flex justify-between">
               <p class="text-gray-400 text-md mt-2"> TOTAL AMOUNT</p>
-              <p class="text-black font-semibold text-md mt-2"> {{order.grand_total}}</p>
+              <p class="text-black font-semibold text-md mt-2">₹ {{order.grand_total}}</p>
             </div>
             <div class="border-b border-gray-300 border-dashed mt-3"></div>
 
             <div [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md" (click)="show_map()">
               <div class="flex justify-between p-3">
                 <p class="text-sm text-white flex items-center">{{ order.status }}</p>
-                <p class="border border-white rounded-full text-xs p-1 text-white">View Map</p>
+                <p class="border border-white rounded-full text-xs p-1 text-white" (click)="show_map()">View Map</p>
               </div>
             </div>
 

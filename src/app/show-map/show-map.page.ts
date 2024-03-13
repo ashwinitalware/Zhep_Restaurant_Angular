@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
-import { Storage } from '@ionic/storage-angular';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 import { Geolocation } from '@capacitor/geolocation';
+import { NgForm } from '@angular/forms';
 declare const google: any;
 
 @Component({
@@ -17,201 +18,246 @@ export class ShowMapPage implements OnInit {
 
   map: any;
   @ViewChild('mapElement') mapElement: any;
+  page: HTMLElement | null = document.querySelector('app-show-map');
+
+  modalRef: HTMLIonModalElement | undefined;
+
   shop_location: any;
-
-  // Add the following variable at the top of your class
-  isSatelliteView: boolean = false;
-
   getCurrentPosition: any;
   user_address = 'Move home marker to select your address';
   btn_disabled: any;
   user_lat = 20.938894;
   user_lang = 77.7421033;
   user_marker: any;
+  geolocation: any;
+  user_id1: any;
 
-  dropOffAddress: string = '';
-  directionsService: any;
-  directionsRenderer: any;
-  distanceInKm: any;
-
-  lat: any;
-  long: any;
-  session_data2 = {
-    lat: '',
-    lng: '',
+  delivery_data = {
+    user_id: '',
+    full_name: '',
+    contact_number: '',
+    house_number: '',
+    address_type: '',
+    landmark: '',
+    address: '',
   };
-  position_id1: any;
 
   constructor(
-    private url: DataService,
+    public url: DataService,
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private storage: Storage,
     private navCtrl: NavController
-  ) {}
+  ) {
+    this.geolocation = Geolocation;
+  }
 
-  ionViewDidEnter() {
-    this.lat = this.url.lat;
-    this.long = this.url.long;
-    this.map = new google.maps.Map(this.mapElement.nativeElement, {
-      center: { lat: this.user_lat, lng: this.user_lang },
-      zoom: 14,
-      disableDefaultUI: true, // a way to quickly hide all controls
+  get_user_current_position(lat: any, lang: any) {
+    this.user_marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lang),
+      map: this.map,
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      icon: {
+        url: `assets/icon/homemark.png`,
+        scaledSize: new google.maps.Size(60, 60),
+        origin: new google.maps.Point(0, 0),
+      },
     });
-    this.directionsService = new google.maps.DirectionsService();
-    this.directionsRenderer = new google.maps.DirectionsRenderer();
-    this.directionsRenderer.setMap(this.map);
-    this.printCurrentPosition();
-    this.dropMarker();
-  }
 
-  // Add the following function in your class
-  toggleSatelliteView() {
-    this.isSatelliteView = !this.isSatelliteView;
-    this.map.setMapTypeId(this.isSatelliteView ? 'hybrid' : 'roadmap');
-  }
-
-  dropMarker() {
-    google.maps.event.addListener(this.map, 'click', (event: any) => {
-      if (this.user_marker) {
-        this.user_marker.setMap(null); // Remove existing marker
-      }
-      this.user_marker = new google.maps.Marker({
-        position: event.latLng,
-        map: this.map,
-        draggable: true,
-        animation: google.maps.Animation.DROP,
-      });
-
-      this.user_lat = event.latLng.lat();
-      this.user_lang = event.latLng.lng();
-      this.fetchAddress(event.latLng.lat(), event.latLng.lng());
-      this.user_marker.addListener('dragend', (e: any) => {
-        this.user_lat = e.latLng.lat();
-        this.user_lang = e.latLng.lng();
-        this.fetchAddress(e.latLng.lat(), e.latLng.lng());
-      });
+    this.map.setZoom(18);
+    const latLng2 = new google.maps.LatLng(lat, lang);
+    this.map.panTo(latLng2);
+    this.fetch_address(lat, lang);
+    this.user_marker.addListener('dragend', (e: any) => {
+      this.user_lat = e.latLng.lat();
+      this.user_lang = e.latLng.lng();
+      this.url.user_map_lat = e.latLng.lat();
+      this.url.user_map_lan = e.latLng.lng();
+      this.fetch_address(e.latLng.lat(), e.latLng.lng());
     });
   }
 
-  fetchAddress(lat: number, lng: number) {
+  fetch_address(lat: any, lng: any) {
     const reverseGeocodingUrl =
       'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
       lat +
       ',' +
       lng +
-      '&sensor=true&key=AIzaSyAuoy_mOPfYGqoZDE2JUT0aceQFEe73yZE';
+      '&sensor=true&key=AIzaSyC1Cz13aBYAbBYJL0oABZ8KZnd7imiWwA4'; 
+      // AIzaSyC1Cz13aBYAbBYJL0oABZ8KZnd7imiWwA4
+    fetch(reverseGeocodingUrl)
+      .then((result) => result.json())
+      .then((featureCollection) => {
+        if (featureCollection.results && featureCollection.results.length > 0) {
+          this.user_address = featureCollection.results[0].formatted_address;
+          this.url.user_map_address = featureCollection.results[0].formatted_address;
+          console.log(lat);
+          this.url.user_map_lat = lat;
+          this.url.user_map_lan = lng;
+          this.btn_disabled = false;
+        } else {
+          console.error('No results found for the given coordinates.');
+          // Handle the case where no results are found
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching address:', error);
+        // Handle the error, e.g., show a message to the user
+      });
+  }
+  
 
+  fetch_address1(lat: any, lng: any) {
+    const reverseGeocodingUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+      lat +
+      ',' +
+      lng +
+      '&sensor=true&key=';
+      // AIzaSyC1Cz13aBYAbBYJL0oABZ8KZnd7imiWwA4
     fetch(reverseGeocodingUrl)
       .then((result) => result.json())
       .then((featureCollection) => {
         this.user_address = featureCollection.results[0].formatted_address;
+        this.url.user_map_address =
+          featureCollection.results[0].formatted_address;
+        console.log(lat);
+        this.url.user_map_lat = lat;
+        this.url.user_map_lan = lng;
         this.btn_disabled = false;
       });
   }
 
-  printCurrentPosition = async () => {
-    const resp = await Geolocation.getCurrentPosition({
-      maximumAge: 5000,
-      timeout: 5000,
-      enableHighAccuracy: true,
+  ionViewDidEnter() {
+    this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      center: { lat: 20.945643, lng: 77.7639723 },
+      zoom: 14,
+      disableDefaultUI: true,
     });
-    // alert(resp.coords.latitude);
-    // this.user_lat = resp.coords.latitude;
-    // this.user_lang = resp.coords.longitude;
-    // this.get_user_current_position(this.user_lat, this.user_lang);
-    this.get_user_current_position(resp.coords.latitude, resp.coords.longitude);
-    console.log(
-      'Current position:',
-      resp.coords.latitude,
-      resp.coords.longitude
-    );
-  };
+    this.printCurrentPosition();
+  }
+
+  animatedMove(marker: any, t: any, current: any, moveto: any) {
+    const lat = current.lat();
+    const lng = current.lng();
+    const latlng = new google.maps.LatLng(lat, lng);
+    marker.setPosition(latlng);
+  }
+
+  async printCurrentPosition() {
+    try {
+      const resp = await this.geolocation.getCurrentPosition({
+        maximumAge: 5000,
+        timeout: 5000,
+        enableHighAccuracy: true,
+      });
+      this.get_user_current_position(resp.coords.latitude, resp.coords.longitude);
+      console.log('Current position:', resp.coords.latitude);
+    } catch (error) {
+      console.error('Error getting current position:', error);
+    }
+  }
+
   confirm_address() {
-    // this.calculate_distance_from_shop();
-    this.navCtrl.back();
+    this.router.navigate(['/cart'], { queryParams: { address: this.user_address } });
   }
 
-  get_user_current_position(lat: number, lng: number) {
-    this.user_marker = new google.maps.Marker({
-      position: new google.maps.LatLng(lat, lng),
-      map: this.map,
-      draggable: true,
-      animation: google.maps.Animation.DROP,
+  save_delivery_address(f: NgForm) {
+    this.storage.get('member').then((res) => {
+      this.user_id1 = parseInt(res.user_id, 10);
+      this.delivery_data.user_id = this.user_id1;
+      this.delivery_data.address_type = f.value.address_type;
+      this.delivery_data.contact_number = f.value.contact_number;
+      this.delivery_data.full_name = f.value.full_name;
+      this.delivery_data.landmark = f.value.landmark;
+      this.delivery_data.house_number = f.value.house_number;
+      this.delivery_data.address = this.user_address;
+      this.url.presentLoading();
+      this.http
+        .post(`${this.url.serverUrl}delivery_address`, this.delivery_data)
+        .subscribe(
+          (res: any) => {
+            this.url.presentToast('Address added successfully.');
+            this.router.navigate(['/add-delivery-address']).then(() => {
+              this.url.dismiss(); 
+              if (this.modalRef) {
+                this.modalRef.dismiss(); // Close the modal
+              }
+            });
+          },
+          (err) => {
+            this.url.presentToast('Failed to submit order. Please try again.');
+            this.url.dismiss(); 
+          }
+        );
     });
-
-    this.map.setZoom(18);
-    const latLng2 = new google.maps.LatLng(lat, lng);
-    this.map.panTo(latLng2);
-    this.fetchAddress(lat, lng);
-    this.user_marker.addListener('dragend', (e: any) => {
-      this.user_lat = e.latLng.lat();
-      this.user_lang = e.latLng.lng();
-      this.fetchAddress(e.latLng.lat(), e.latLng.lng());
-    });
-
-    // this.session_data2['lat'] = '';
-    // // eslint-disable-next-line @typescript-eslint/dot-notation
-    // this.session_data2['lng'] = '';
-    // this.storage.set('position', this.session_data2);
-    // console.log(this.storage.get('position'));
-
-    // // eslint-disable-next-line @typescript-eslint/no-shadow
-    // this.storage.get('position').then((res) => {
-    //   this.position_id1 = parseInt(res.lat, 10);
-    //   console.log(this.position_id1);
-    // });
-
   }
-  showRoute() {
-    if (this.user_lat && this.user_lang && this.dropOffAddress) {
-      const request = {
-        origin: new google.maps.LatLng(this.user_lat, this.user_lang),
-        destination: this.dropOffAddress,
-        travelMode: 'DRIVING',
-      };
 
-      this.directionsService.route(request, (result: any, status: any) => {
+  
+  // openModal() {
+  //   const modal = document.querySelector('ion-modal');
+  //   if (modal) {
+  //     modal.componentOnReady().then(() => {
+  //       modal.present();
+  //     });
+  //   }
+  // }
+
+  openModal() {
+    const modal = document.querySelector('ion-modal');
+    if (modal) {
+      modal.componentOnReady().then(() => {
+        this.modalRef = modal as HTMLIonModalElement;
+        this.modalRef.present();
+      });
+    }
+  }
+ 
+
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+  ngOnInit() {
+  }
+
+  searchAddress(event: CustomEvent) {
+    const searchText = (event.detail.value || '').trim();
+    if (searchText !== '') {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: searchText }, (results: any, status: any) => {
         if (status === 'OK') {
-          this.directionsRenderer.setDirections(result);
-
-          const distance =
-            google.maps.geometry.spherical.computeDistanceBetween(
-              result.routes[0].legs[0].start_location,
-              result.routes[0].legs[0].end_location
-            );
-          const distanceInKm = (distance / 1000).toFixed(2);
-          this.distanceInKm = distanceInKm;
-
-          const distanceMarker = new google.maps.Marker({
-            position: result.routes[0].legs[0].end_location,
+          const location = results[0].geometry.location;
+          if (this.user_marker) {
+            this.user_marker.setMap(null);
+          }
+          this.user_marker = new google.maps.Marker({
+            position: location,
             map: this.map,
-            label: distanceInKm + ' km',
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            icon: {
+              url: `assets/icon/homemark.png`,
+              scaledSize: new google.maps.Size(60, 60),
+              origin: new google.maps.Point(0, 0),
+            },
           });
-
-          const bounds = new google.maps.LatLngBounds();
-          bounds.extend(new google.maps.LatLng(this.user_lat, this.user_lang));
-          bounds.extend(result.routes[0].legs[0].end_location);
-          this.map.fitBounds(bounds);
+          this.map.setCenter(location);
+          this.user_address = results[0].formatted_address;
+          console.log('Searched Location:', this.user_address);
+        } else {
+          console.error('Geocode was not successful for the following reason:', status);
         }
       });
+    } else {
+      console.log('Search text is empty');
     }
   }
 
 
-
-  confirmAddress() {
-    console.log('User Address:', this.user_address);
-    console.log('Drop-off Address:', this.dropOffAddress);
-    console.log('User Location:', this.user_lat, this.user_lang);
-
-    this.dropOffAddress = ''; // Clear the input field
-    this.directionsRenderer.set('directions', null); // Reset the directions
+  async canDismiss(data?: any, role?: string) {
+    return role !== 'gesture';
   }
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit() {}
- 
-
+  updateAddress(address: string) {
+    this.user_address = address;
+  }
 }

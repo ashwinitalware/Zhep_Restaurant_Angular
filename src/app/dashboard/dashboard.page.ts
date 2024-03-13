@@ -78,7 +78,8 @@ export class DashboardPage implements OnInit {
                 order.status === 'Order Accepted' ||
                 order.status === 'Order Cooking' ||
                 order.status === 'Ready for Pickup' ||
-                order.status === 'Order is Pickup'
+                order.status === 'Order is Pickup' ||
+                order.status === 'Order Delivered'
               );
   
               this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
@@ -108,9 +109,11 @@ export class DashboardPage implements OnInit {
       case 'Order Cooking':
         return '#00771c'; // Green
       case 'Order is Pickup':
-        return '#00771c'; // Adjust this to the desired color for "Order is Pickup"
+        return '#00771c'; 
+        case 'Order Delivered':
+          return '#00771c';
       default:
-        return '#ffc409'; // Default color
+        return '#ffc409'; 
     }
   }
   
