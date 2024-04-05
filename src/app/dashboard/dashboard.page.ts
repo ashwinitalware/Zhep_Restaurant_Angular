@@ -74,11 +74,11 @@ export class DashboardPage implements OnInit {
             if (res.status) {
               // Filter orders based on status
               this.allprocessing = res.data.filter((order: any) =>
-                order.status === 'Pending Delivery Boy' ||
+                order.status === 'Searching Delivery Boy' ||
                 order.status === 'Order Accepted' ||
                 order.status === 'Order Cooking' ||
                 order.status === 'Ready for Pickup' ||
-                order.status === 'Order is Pickup' ||
+                order.status === 'Food is On the Way' ||
                 order.status === 'Order Delivered'
               );
   
@@ -101,14 +101,14 @@ export class DashboardPage implements OnInit {
 
   getBackgroundColor(status: string): string {
     switch (status) {
-      case 'Pending Delivery Boy':
+      case 'Searching Delivery Boy':
         return '#ffc409'; // Yellow
       case 'In Progress':
         return 'orange';
       case 'Order Accepted':
       case 'Order Cooking':
         return '#00771c'; // Green
-      case 'Order is Pickup':
+      case 'Food is On the Way':
         return '#00771c'; 
         case 'Order Delivered':
           return '#00771c';
@@ -126,11 +126,11 @@ export class DashboardPage implements OnInit {
   //           if (res.status) {
   //             // Filter orders based on status
   //             this.allprocessing = res.data.filter((order: any) =>
-  //               order.status === 'Pending Delivery Boy' ||
+  //               order.status === 'Searching Delivery Boy' ||
   //               order.status === 'Order Accepted' ||
   //               order.status === 'Order Cooking' ||
   //               order.status === 'Ready for Pickup' ||
-  //               order.status === 'Order is Pickup'
+  //               order.status === 'Food is On the Way'
   //             );
   
   //             this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
