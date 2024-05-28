@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Zhep_Restaurant_Angular</string>
+    <string name="title_activity_main">Zhep_Restaurant_Angular</string>
+    <string name="package_name">io.zheprestaurant.com</string>
+    <string name="custom_url_scheme">io.zheprestaurant.com</string>
+</resources>

@@ -1,4 +1,5 @@
 <ion-header [translucent]="true">
+  <ion-toolbar color="dark" class="border-b-2 border-red-600 text-md font-bold" align="center">RESTAURANT</ion-toolbar>
   <ion-toolbar color="dark">
     <ion-segment color="light" class="pl-1 pr-1" value="order" (ionChange)='segmentChanged($event)'>
       <ion-segment-button (click)="book_order()" value="order">
@@ -56,7 +57,7 @@
              <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
               <div>
                 <div class="flex justify-between">
-                  <p class="text-black text-lg font-semibold mt-2">{{card.index}} {{card.recipe_name}} - Qty :
+                  <p class="text-black text-lg font-semibold mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
                     {{card.quantity}}</p>
                   <p>₹ {{card.recipe_price}} /-</p>
                 </div>
