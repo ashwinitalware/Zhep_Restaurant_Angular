@@ -1,48 +1,42 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title color="light">Location</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button class="text-white"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Track Delivery Boy</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content>
-  <div #mapElement class="map"></div>
+  <div #mapElement style="height: 100%;"></div>
+  <div class="mt-1" style="z-index: 1; position: absolute; bottom: 5; top: 0;">
+    <ion-chip class="bg-black text-white"><ion-icon class="text-white" name="alarm"></ion-icon>&nbsp; {{ estimatedTime
+      }}</ion-chip>
+  </div>
 
-
-  <!-- <div class="address_main_div">
-    <ion-row>
-      <ion-col size="12" class="border border-gray-200 rounded-md p-2">
-        <ion-label class="font-bold text-sm text-black">Current Location:</ion-label>
-        <ion-label>{{ user_address }}</ion-label>
-      </ion-col>
-
-      <ion-col size="12" class="border border-gray-200 rounded-md mt-2 p-2">
-        <ion-label position="stacked" class="font-bold text-sm text-black">Drop-off Location:</ion-label>
-        <ion-input placeholder="enter drop-off" [(ngModel)]="dropOffAddress"></ion-input>
-      </ion-col>
-
-    </ion-row>
-
-    <ion-row *ngIf="distanceInKm">
-      <ion-col size="12" class="border border-gray-200 rounded-md mt-2 p-2">
-        <ion-label class="font-bold text-sm text-black">Distance:</ion-label>
-        <ion-label>{{ distanceInKm }} km</ion-label>
-      </ion-col>
-    </ion-row>
-
-
-
-    <div align="center" (click)="toggleSatelliteView()" class="bg-white rounded-md p-1 border border-blue-700"
-      style="z-index: 1000; position: absolute; margin-top: -65%;">
-      <img src="assets/orbit.png" alt="">
-      <p class="text-blue-600 font-bold text-sm">Satellite View </p>
-    </div>
-
-    <ion-row>
-      <button expand="block" [disabled]="btn_disabled" (click)="showRoute()"
-        class="btn-3 w-full p-4 text-white rounded-sm text-sm">
-        Show Route
-      </button>
-    </ion-row>
-  </div> -->
+<ion-row>
+  <ion-col size="12"  class="p-2" style="z-index: 1; position: absolute; bottom: 0; top: 5;">
+  
+      <div class="bg-white w-full rounded-lg border border-gray-300">
+        <div class="flex justify-between p-2">
+          <div>
+            <div class="flex justify-start">
+              <div><ion-icon class="text-4xl mt-2" name="person-circle"></ion-icon></div>
+              <div class="pl-2">
+                <p class="text-black text-sm"> {{ firstName }} {{ lastName }}</p>
+                <p class="text-gray-500 text-sm">+91 {{ primary_contact }}</p>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="flex items-center ">
+            <ion-icon class="text-black text-xl" name="call" (click)="openDialer(primary_contact)"></ion-icon>
+          </div>
+        </div>
+      </div>
+    
+  </ion-col>
+</ion-row>
 </ion-content>

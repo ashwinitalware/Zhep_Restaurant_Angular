@@ -33,46 +33,50 @@
   <!-- ===Second div start== -->
   <div *ngIf="!noOrdersFound">
     <div *ngIf="switchTab === 'order'" class="p-1">
-      <div class="bdashboard bdashboard-gray-300 rounded-md border border-gray-400 mb-2"
+      <div class="bdashboard bdashboard-gray-300 rounded-md border border-gray-300 mb-2"
         *ngFor="let order of allbooktables">
-        <ng-container *ngIf="order.status === 'In Progress'">
+        <ng-container *ngIf="order.status === 'In Progress' || order.status === 'Rejected'">
           <ion-grid>
-            <ion-row class="border-b border-gray-400">
+            <ion-row class="border-b border-dashed border-gray-400">
               <ion-col size="12">
                 <div class="flex justify-between">
                   <div>
-                    <p class="text-lg text-black">{{order.name}}</p>
-                    <p class="text-gray-400 text-sm">{{order.order_date}}</p>
+                    <p class="text-sm text-black">{{order.name}}</p>
+                    <p class="text-gray-400 text-xs mt-1"><ion-icon name="calendar"></ion-icon> {{order.order_date}}</p>
                   </div>
                   <div>
-                    <p class="text-sm text-black">ID: {{order.order_id2}}</p>
+                    <p class="text-xs text-gray-400"># {{order.order_id2}}</p>
                   </div>
                 </div>
               </ion-col>
             </ion-row>
+
             <div class="p-2">
               <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
-
-              <!-- Items Div -->
-             <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
-              <div>
+      
+              <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
                 <div class="flex justify-between">
-                  <p class="text-black text-lg font-semibold mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
-                    {{card.quantity}}</p>
-                  <p>₹ {{card.recipe_price}} /-</p>
+                  <p class="text-black text-md font-600 mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
+                    {{card.quantity}}<br>
+                    <span class="text-xs text-gray-400">VARIENT - {{card.varient}} </span>
+                  </p>
+                  <p class="mt-2">₹ {{card.recipe_price}} /-</p>
                 </div>
-                <p class="text-gray-500 text-md">Varient : {{card.varient}}
-                </p>
               </div>
-             </div>
 
-              <div class="flex justify-between">
-                <p class="text-gray-500 text-md mt-2"> TOTAL AMOUNT</p>
+              <div class="flex justify-between pr-2 mt-1" *ngIf="order.coupon_code !== null">
+                <p class="text-sm font-semibold text-green-600 mt-1">Customer Applied Coupon {{order.coupon_code}}.
+                 </p>
+                <p class="font-bold text-green-600 text-md">₹ {{order.discount}}</p>
+              </div>
+
+              <div class="flex justify-between pr-2">
+                <p class="text-black font-semibold text-md mt-2"> TOTAL AMOUNT</p>
                 <p class="text-black font-semibold text-md mt-2">₹ {{order.grand_total}}</p>
               </div>
             </div>
 
-            <ion-row>
+            <ion-row *ngIf="order.status !== 'Rejected'">
               <ion-col size="6">
                 <ion-button (click)="accept_table(order['order_id2'])" class="btn_class" color="success" expand="block">
                   Accept
@@ -84,7 +88,17 @@
                   Reject
                 </ion-button>
               </ion-col>
+
             </ion-row>
+            <ion-row  *ngIf="order.status === 'Rejected'">
+              <ion-col size="12">
+                <ion-button (click)="cancel_table(order['order_id2'])" class="btn_class" color="danger" expand="block"
+                 >
+                  Rejected
+                </ion-button>
+              </ion-col>
+            </ion-row>
+
           </ion-grid>
         </ng-container>
       </div>
@@ -94,44 +108,67 @@
       <div class="bdashboard bdashboard-gray-300 rounded-md border border-gray-300 mt-2"
         *ngFor="let order of allprocessing">
         <ion-grid>
-          <ion-row class="border-b border-gray-400">
+          <ion-row class="border-b border-dashed border-gray-400">
             <ion-col size="12">
               <div class="flex justify-between">
                 <div>
                   <p class="text-lg text-black">{{order.name}}</p>
-                  <p class="text-gray-400 text-sm">{{order.order_date}}</p>
+                  <p class="text-gray-400 text-xs mt-1"><ion-icon name="calendar"></ion-icon> {{order.order_date}}</p>
                 </div>
                 <div>
-                  <p class="text-sm text-black">ID: {{order.order_id2}}</p>
+                  <p class="text-xs text-gray-400"># {{order.order_id2}}</p>
                 </div>
               </div>
             </ion-col>
           </ion-row>
           <div class="p-2">
             <p class="text-gray-400 text-xs mt-2"> ITEMS</p>
-            <!-- Items Div -->
-           <div  class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
-            <div >
+
+            <div class="border-gray-300 border-dashed border-b" *ngFor="let card of order.cards">
               <div class="flex justify-between">
-                <p class="text-black text-lg font-semibold mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
-                  {{card.quantity}}</p>
-                <p>₹ {{card.recipe_price}} /-</p>
+                <p class="text-black text-md font-600 mt-2">{{card.index}}. {{card.recipe_name}} - Qty :
+                  {{card.quantity}}<br>
+                  <span class="text-xs text-gray-400">VARIENT - {{card.varient}} </span>
+                </p>
+                <p class="mt-2">₹ {{card.recipe_price}} /-</p>
               </div>
             </div>
-            <p class="text-gray-500 text-md">Varient : {{card.varient}}
-            </p>
+
+            <div class="flex justify-between pr-2 mt-1" *ngIf="order.coupon_code !== null">
+              <p class="text-sm font-semibold text-green-600 mt-1">Customer Applied Coupon {{order.coupon_code}}.
+               </p>
+              <p class="font-bold text-green-600 text-md">₹ {{order.discount}}</p>
             </div>
-            <!-- Items Div -->
-            <div class="flex justify-between">
-              <p class="text-gray-400 text-md mt-2"> TOTAL AMOUNT</p>
+
+            <!-- <p *ngIf="order.coupon_code !== null" class="text-xs bg-green-50 text-green-600 border-green-100 border rounded-sm text-center ">You got a
+              "₹{{order.discount}}" discount by using coupon code #{{order.coupon_code}}!</p> -->
+    
+            <div class="flex justify-between pr-2">
+              <p class="text-black font-semibold text-md mt-2"> TOTAL AMOUNT</p>
               <p class="text-black font-semibold text-md mt-2">₹ {{order.grand_total}}</p>
             </div>
+
+
             <div class="border-b border-gray-300 border-dashed mt-3"></div>
 
-            <div [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md" (click)="show_map()">
+            <ng-container *ngIf="order.status === 'Searching Delivery Boy'">
+              <div [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md">
+                <div class="flex justify-center p-3">
+                  <p class="text-sm text-white flex items-center">{{ order.status }}</p>
+                </div>
+              </div>
+            </ng-container>
+
+            <div *ngIf="order.status !== 'Searching Delivery Boy' && order.status !== 'Order Delivered' " [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md" (click)="show_map(order.id)">
               <div class="flex justify-between p-3">
                 <p class="text-sm text-white flex items-center">{{ order.status }}</p>
-                <p class="border border-white rounded-full text-xs p-1 text-white" (click)="show_map()">View Map</p>
+                <p class="border border-white rounded-full text-xs p-1 text-white" (click)="show_map(order.id)">View Map</p>
+              </div>
+            </div>
+
+            <div *ngIf="order.status === 'Order Delivered'" [style.backgroundColor]="getBackgroundColor(order.status)" class="rounded-md" (click)="show_map(order.id)">
+              <div class="flex justify-center p-3">
+                <p class="text-sm text-white flex items-center">{{ order.status }}</p>
               </div>
             </div>
 
@@ -158,15 +195,18 @@
 <ion-footer>
   <ion-toolbar>
     <div class="flex justify-between p-2 pl-3 pr-3">
-      <div class="text-center text-gray-600 hover:text-red-600" routerLink="/dashboard">
-        <ion-icon name="fast-food"></ion-icon>
-        <ion-title class="text-sm">Orders</ion-title>
-      </div>
-
-      <div class="text-center text-gray-600 hover:text-red-600" routerLink="/profile">
-        <ion-icon name="person"></ion-icon>
-        <ion-title class="text-sm">Account</ion-title>
-      </div>
+      <ion-router-link routerLink="/dashboard">
+        <div align="center" class=" text-red-600">
+          <img width="25" height="25" src="assets/22.png" alt="">
+          <ion-title class="text-sm">Orders</ion-title>
+        </div>
+      </ion-router-link>
+      <ion-router-link routerLink="/profile">
+        <div align="center" class="text-gray-400">
+          <img width="25" height="25" src="assets/12.png" alt="">
+          <ion-title class="text-sm">Account</ion-title>
+        </div>
+      </ion-router-link>
     </div>
   </ion-toolbar>
 

@@ -30,6 +30,7 @@ export class DashboardPage implements OnInit {
 
   async ngOnInit() {
     await this.storage.create();
+    this.get_restro_order(); 
   }
 
   table_accepted = {
@@ -57,10 +58,6 @@ export class DashboardPage implements OnInit {
   ionViewWillEnter() {
     this.url.presentLoading();
     this.get_restro_order();
-    // this.get_restro_order();
-    // setInterval((): void => {
-    //   this.get_restro_order();
-    // }, 60000);
     this.url.dismiss();
   }
 
@@ -82,7 +79,7 @@ export class DashboardPage implements OnInit {
                 order.status === 'Order Delivered'
               );
   
-              this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
+              this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress'|| order.status === 'Rejected');
   
               // If the segment is not already set, determine the initial segment based on the presence of orders
               if (!this.switchTab) {
@@ -117,37 +114,6 @@ export class DashboardPage implements OnInit {
     }
   }
   
-  // get_restro_order() {
-  //   this.storage.get('restro').then((res1) => {
-  //     this.user_id1 = parseInt(res1.email, 10);
-  //     this.http.get(`${this.url.serverUrl}getRestroOrder?restro_id=${this.user_id1}`)
-  //       .subscribe(
-  //         (res: any) => {
-  //           if (res.status) {
-  //             // Filter orders based on status
-  //             this.allprocessing = res.data.filter((order: any) =>
-  //               order.status === 'Searching Delivery Boy' ||
-  //               order.status === 'Order Accepted' ||
-  //               order.status === 'Order Cooking' ||
-  //               order.status === 'Ready for Pickup' ||
-  //               order.status === 'Food is On the Way'
-  //             );
-  
-  //             this.allbooktables = res.data.filter((order: any) => order.status === 'In Progress');
-  
-  //             // If the segment is not already set, determine the initial segment based on the presence of orders
-  //             if (!this.switchTab) {
-  //               this.switchTab = this.allprocessing.length > 0 ? 'processing' : 'order';
-  //             }
-  //           } else {
-  //             this.url.presentToast('You have no Order.');
-  //           }
-  //         },
-  //         (err) => {
-  //         }
-  //       );
-  //   });
-  // }
 
 reloadData() {
   this.isDataLoaded = false;
@@ -185,8 +151,8 @@ reloadData() {
     }
   }
   
-  show_map() {
-    this.router.navigate([`show-map`]);
+  show_map(id: any) {
+    this.router.navigate(['show-map', { id: id }]);
   }
 
 

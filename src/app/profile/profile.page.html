@@ -12,7 +12,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/2.png" alt="">&nbsp;
         <ion-label>Orders</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -20,7 +20,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/t&c.png" alt="">&nbsp;
         <ion-label>Terms and Conditions</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -28,7 +28,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/t&c.png" alt="">&nbsp;
         <ion-label>Privacy policy</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -38,7 +38,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/share.png" alt="">&nbsp;
         <ion-label>Share App</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -46,7 +46,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/rateus.png" alt="">&nbsp;
         <ion-label>Reviews</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -54,7 +54,7 @@
   
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <img width="25" height="25" src="assets/5.png" alt="">&nbsp;
         <ion-label>Change Password</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -62,7 +62,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="alert-circle-outline"></ion-icon>
+        <img width="25" height="25" src="assets/12.png" alt="">&nbsp;
         <ion-label>About Us</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -70,7 +70,7 @@
 
     <div>
       <ion-item class="p-2">
-        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <img width="25" height="25" src="assets/support.png" alt="">&nbsp;
         <ion-label>Contact Us</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -78,7 +78,7 @@
 
     <div>
       <ion-item class="p-2" (click)="logout();">
-        <ion-icon slot="start" name="power-outline"></ion-icon>
+        <img width="25" height="25" src="assets/logout.png" alt="">&nbsp;
         <ion-label>Log Out</ion-label>
         <a routerLink="dashboard"><ion-icon slot="end" name="chevron-forward-outline"></ion-icon></a>
       </ion-item>
@@ -86,3 +86,23 @@
   
   </ion-content>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <div class="flex justify-between p-2 pl-3 pr-3">
+      <ion-router-link routerLink="/dashboard">
+        <div align="center" class=" text-gray-600">
+          <img width="25" height="25" src="assets/2.png" alt="">
+          <ion-title class="text-sm">Orders</ion-title>
+        </div>
+      </ion-router-link>
+      <ion-router-link routerLink="/profile">
+        <div align="center" class="text-red-600">
+          <img width="25" height="25" src="assets/accountred.png" alt="">
+          <ion-title class="text-sm">Account</ion-title>
+        </div>
+      </ion-router-link>
+    </div>
+  </ion-toolbar>
+
+
+</ion-footer>
